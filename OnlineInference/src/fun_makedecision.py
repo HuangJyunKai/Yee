@@ -256,7 +256,8 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
     ROI_area = (max(th_roi_h)-min(th_roi_h))*(max(th_roi_w)-min(th_roi_w)) 
     
     img_result = img.copy()
-    img_result = plot_ROI(img_result, [th_roi_w[0],th_roi_h[0],th_roi_w[1],th_roi_h[1]])
+    img_result = plot_ROI(
+        img_result, [th_roi_w[0],th_roi_h[0],th_roi_w[1],th_roi_h[1]])
     
     #此function用來推論"線的方程式"，所以需要"線的segmentation"和"角點的segmentation"
     h_img, w_img = fun_getimageWH(map_seg_label_line)
@@ -323,6 +324,7 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                 n_motor_line = np.sum(box_label_line==0)  # 機車停車格       
                 n_car_line =np.sum(box_label_line==1)  # 汽車停車格
                 n_red_line = np.sum(box_label_line==6)  # 紅線
+                n_bus_line = np.sum(box_label_line==2) #公車格
                 
                 
                 # 開始判斷準則
@@ -365,17 +367,18 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                     decision_box['decision'] = 'Violation_parking_in_redline'
                     decision_box['bbox'] = bbox
                     img_result = plot_bbox_Violation(img_result, bbox,(255,0,0))
-                elif ((n_bus_line>=20) &\
-                     (object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
+                elif ((n_bus_line > n_car_line) | (n_bus_line > n_motor_line)) & (n_bus_line>=40) &\
+                     ((object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
                     '''
-                    (公車線pixel數量 > 20)
+                    (紅線pixel數量 > 汽車線停車線的pixel數量) 或是 (紅線pixel數量 > 汽機車線停車線的pixel數量)
                     且
                     物件為b(大車)或t(卡車)或m(機車上無人)或是c(汽車)
                     就是公車格違停
                     '''
                     decision_box['decision'] = 'Violation_parking_in_redline'
                     decision_box['bbox'] = bbox
-                    img_result = plot_bbox_Violation(img_result, bbox,(255,255,0))
+                    img_result = plot_bbox_Violation(img_result, bbox,(255,0,255))
+                
                 else:
                     '''
                     沒被規範到的預設為pass
