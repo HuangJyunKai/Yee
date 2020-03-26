@@ -366,7 +366,7 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                     decision_box['bbox'] = bbox
                     img_result = plot_bbox_Violation(img_result, bbox,(255,0,0))
                 elif ((n_bus_line>=20) &\
-                     ((object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
+                     (object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
                     '''
                     (公車線pixel數量 > 20)
                     且
