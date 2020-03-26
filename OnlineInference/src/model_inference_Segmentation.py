@@ -160,6 +160,11 @@ def evaluateModel_models(model_road, model_lane, original_image, inWidth, inHeig
     # time_start = time.time()
     classMap_np_output_road = np.array(img_out_road[0].max(0)[1].byte().cpu().data.numpy())
     classMap_np_output_lane = np.array(img_out_lane[0].max(0)[1].byte().cpu().data.numpy())
+    ################################################# relabel for kevin's line seg #########################################################
+    classMap_np_output_lane[classMap_np_output_lane==0]=100
+    classMap_np_output_lane -= 1
+    classMap_np_output_lane[classMap_np_output_lane==99]=11
+    ################################################# relabel for kevin's line seg #########################################################
     # closing
     classMap_np_output_lane = cv2.morphologyEx(classMap_np_output_lane, cv2.MORPH_CLOSE, kernel, iterations=1)
     classMap_np_output_road = cv2.morphologyEx(classMap_np_output_road, cv2.MORPH_CLOSE, kernel, iterations=1)
