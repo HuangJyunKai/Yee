@@ -272,6 +272,11 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
         
         # bbox左上右下的座標轉換成圖的長和寬
         bbox_x, bbox_y, bbox_w, bbox_h = fun_box2hw(bbox_axis)
+        ### 刪除左下右下的carself
+        #左上(Front鏡頭)排除
+        if bbox_x < 500 and bbox_y > 800 :
+            continue
+        
         # 將detected的bbox拉大一點
         bbox_axis[0] = int(bbox_axis[0]-bbox_w*0.0)
         if bbox_axis[0]<=0: bbox_axis[0]=0
