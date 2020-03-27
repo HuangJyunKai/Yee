@@ -271,6 +271,12 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
         
         # bbox左上右下的座標轉換成圖的長和寬
         bbox_x, bbox_y, bbox_w, bbox_h = fun_box2hw(bbox_axis)
+        ### 刪除左下右下的carself
+        #左上(Front鏡頭)排除
+        if bbox_x < 500 and bbox_y > 800 :
+            print('==============================Delete Carself bbox========================================')
+            continue
+        
         # 將detected的bbox拉大一點
         bbox_axis[0] = int(bbox_axis[0]-bbox_w*0.0)
         if bbox_axis[0]<=0: bbox_axis[0]=0
@@ -357,7 +363,7 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                 elif ((n_red_line > n_car_line) | (n_red_line > n_motor_line)) & (n_red_line>=20) &\
                      ((object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
                     '''
-                    (紅線pixel數量 > 汽車線停車線的pixel數量) 或是 (紅線pixel數量 > 汽機車線停車線的pixel數量)
+                    (紅線pixel數量 > 汽車線停車線的pixel數量) 或是 (紅線pixel數量 > 機車線停車線的pixel數量)
                     且
                     物件為b(大車)或t(卡車)或m(機車上無人)或是c(汽車)
                     就是紅線違停
