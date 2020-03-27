@@ -274,7 +274,6 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
         ### 刪除左下右下的carself
         #左上(Front鏡頭)排除
         if bbox_x < 500 and bbox_y > 800 :
-            print('==============================Delete Carself bbox========================================')
             continue
         
         # 將detected的bbox拉大一點
