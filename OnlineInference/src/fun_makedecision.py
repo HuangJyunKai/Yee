@@ -322,7 +322,7 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                 算1. 機車停車格，2.汽車停車格，3. 紅線 的pixel數
                 '''
                 box_label_line = map_seg_label_line[bbox_h_range[0]:bbox_h_range[1], bbox_w_range[0]:bbox_w_range[1]]
-                box_label_line_red = map_seg_label_line[bbox_h_range[0]+int(bbox_h_range[1]*0.7):bbox_h_range[1], bbox_w_range[0]:bbox_w_range[1]]
+                box_label_line_red = map_seg_label_line[bbox_h_range[0]+int(bbox_h_range[1]*0.5):bbox_h_range[1], bbox_w_range[0]:bbox_w_range[1]]
                 n_motor_line = np.sum(box_label_line==0)  # 機車停車格       
                 n_car_line = np.sum(box_label_line==1)  # 汽車停車格
                 n_red_line = np.sum(box_label_line_red==6)  # 紅線
@@ -360,7 +360,7 @@ def fun_detection_TrafficViolation(img, bboxes, map_seg_label_line, map_seg_labe
                     decision_box['decision'] = 'pass'
                     decision_box['bbox'] = bbox
                     img_result = plot_bbox(img_result, bbox)
-                elif ((n_red_line > n_car_line) & (n_red_line > n_motor_line) & (n_red_line>n_white_line)&(n_red_line>n_mstop_line)) & (n_red_line>=20) &\
+                elif (((n_red_line > n_car_line) | (n_red_line > n_motor_line)) & (n_red_line>n_white_line)&(n_red_line > n_mstop_line)) & (n_red_line>=10) &\
                      ((object_label=='b') | (object_label=='t') | (object_label=='m') | (object_label=='c')):
                     '''
                     (紅線pixel數量 > 汽車線停車線的pixel數量) 或是 (紅線pixel數量 > 機車線停車線的pixel數量)
