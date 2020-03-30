@@ -29,8 +29,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print('GPU:',device)
 # load segmentation model
-filepath_model_seg_LaneLine = './models/model_148_lane_512_256_p2_q3_1206.pth'
-filepath_model_seg_road = './models/model_147_road_512_256_p2_q3_1206.pth'
+#filepath_model_seg_LaneLine = './models/model_148_lane_512_256_p2_q3_1206.pth'
+#filepath_model_seg_road = './models/model_147_road_512_256_p2_q3_1206.pth'
+filepath_model_seg_LaneLine = './models/ESPNet_Line_mytransfrom_full_256_512_weights_epoch_131.pth'
+filepath_model_seg_road = './models/ESPNet_road_mytransfrom_full_256_512_weights_epoch_41.pth'
 # Load Object Detection model
 checkpoint_path = './models/od_NoPretrain/BEST_checkpoint.pth.tar'
 video_path='./mnt/OV_001-Part1_OV_001_0001.avi'
@@ -76,7 +78,8 @@ def fun_load_Seg_model(filepath_model_seg, flag_seg_type):
     if flag_seg_type == 'LaneLine':
         model_seg = Net.ESPNet(classes=12, p=2, q=3) 
     elif flag_seg_type == 'Road':
-        model_seg = Net.ESPNet_corner_heatmap(classes=3, p=2, q=3)  
+        #model_seg = Net.ESPNet_corner_heatmap(classes=3, p=2, q=3)  
+        model_seg = Net.ESPNet_Road(classes=3, p=2, q=3)  
     model_seg_dict = model_seg.state_dict()
     model_refernce = torch.load(filepath_model_seg, map_location=device)
     #pretrained_dict = {k[7:]: v for k, v in pretrain_dict.items() if k[7:] in model_dict}
